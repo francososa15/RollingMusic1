@@ -8,6 +8,7 @@ const AdminPage = () => {
     artworkUrl: "",
     previewUrl: "",
   });
+  const [errors, setErrors] = useState({});
   const [manualSongs, setManualSongs] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -23,9 +24,53 @@ const AdminPage = () => {
     });
   };
 
+  // Validaciones
+  const validate = (data) => {
+    const newErrors = {};
+    const textRegex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ .,'-]{2,50}$/;
+    const urlRegex = /^(https?:\/\/)[^\s]+$/;
+    const imageRegex = /^(https?:\/\/)[^\s]+\.(jpg|jpeg|png|gif|webp)$/i;
+
+    // trackName
+    if (!data.trackName.trim()) {
+      newErrors.trackName = "El nombre es obligatorio.";
+    } else if (data.trackName.length < 2 || data.trackName.length > 50) {
+      newErrors.trackName = "Debe tener entre 2 y 50 caracteres.";
+    } else if (!textRegex.test(data.trackName)) {
+      newErrors.trackName = "Solo letras, números y caracteres válidos. Sin <, >, /, etc.";
+    }
+
+    // artistName
+    if (!data.artistName.trim()) {
+      newErrors.artistName = "El artista es obligatorio.";
+    } else if (data.artistName.length < 2 || data.artistName.length > 50) {
+      newErrors.artistName = "Debe tener entre 2 y 50 caracteres.";
+    } else if (!textRegex.test(data.artistName)) {
+      newErrors.artistName = "Solo letras, números y caracteres válidos. Sin <, >, /, etc.";
+    }
+
+    // artworkUrl
+    if (!data.artworkUrl.trim()) {
+      newErrors.artworkUrl = "La URL de la portada es obligatoria.";
+    } else if (!imageRegex.test(data.artworkUrl)) {
+      newErrors.artworkUrl = "Debe ser una URL de imagen válida (.jpg, .png, .jpeg, .gif, .webp).";
+    }
+
+    // previewUrl
+    if (!data.previewUrl.trim()) {
+      newErrors.previewUrl = "La URL de la canción es obligatoria.";
+    } else if (!urlRegex.test(data.previewUrl)) {
+      newErrors.previewUrl = "Debe ser una URL válida (http o https).";
+    }
+
+    return newErrors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (songData.trackName && songData.artistName && songData.artworkUrl && songData.previewUrl) {
+    const validationErrors = validate(songData);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length === 0) {
       if (isEditing) {
         const updatedManualSongs = manualSongs.map((song) =>
           song.trackId === songData.trackId ? songData : song
@@ -45,8 +90,7 @@ const AdminPage = () => {
         artworkUrl: "",
         previewUrl: "",
       });
-    } else {
-      alert("Por favor, completa todos los campos.");
+      setErrors({});
     }
   };
 
@@ -91,13 +135,16 @@ const AdminPage = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control form-control-lg"
+                    className={`form-control form-control-lg${errors.trackName ? ' is-invalid' : ''}`}
                     id="trackName"
                     name="trackName"
                     value={songData.trackName}
                     onChange={handleChange}
+                    minLength={2}
+                    maxLength={50}
                     required
                   />
+                  {errors.trackName && <div className="invalid-feedback">{errors.trackName}</div>}
                 </div>
                 <div className="mb-3">
                   <label htmlFor="artistName" className="form-label fw-semibold">
@@ -106,13 +153,16 @@ const AdminPage = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control form-control-lg"
+                    className={`form-control form-control-lg${errors.artistName ? ' is-invalid' : ''}`}
                     id="artistName"
                     name="artistName"
                     value={songData.artistName}
                     onChange={handleChange}
+                    minLength={2}
+                    maxLength={50}
                     required
                   />
+                  {errors.artistName && <div className="invalid-feedback">{errors.artistName}</div>}
                 </div>
                 <div className="mb-3">
                   <label htmlFor="artworkUrl" className="form-label fw-semibold">
@@ -121,13 +171,14 @@ const AdminPage = () => {
                   </label>
                   <input
                     type="url"
-                    className="form-control form-control-lg"
+                    className={`form-control form-control-lg${errors.artworkUrl ? ' is-invalid' : ''}`}
                     id="artworkUrl"
                     name="artworkUrl"
                     value={songData.artworkUrl}
                     onChange={handleChange}
                     required
                   />
+                  {errors.artworkUrl && <div className="invalid-feedback">{errors.artworkUrl}</div>}
                 </div>
                 <div className="mb-3">
                   <label htmlFor="previewUrl" className="form-label fw-semibold">
@@ -136,13 +187,14 @@ const AdminPage = () => {
                   </label>
                   <input
                     type="url"
-                    className="form-control form-control-lg"
+                    className={`form-control form-control-lg${errors.previewUrl ? ' is-invalid' : ''}`}
                     id="previewUrl"
                     name="previewUrl"
                     value={songData.previewUrl}
                     onChange={handleChange}
                     required
                   />
+                  {errors.previewUrl && <div className="invalid-feedback">{errors.previewUrl}</div>}
                 </div>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                   {isEditing && (
