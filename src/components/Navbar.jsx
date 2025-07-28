@@ -1,4 +1,4 @@
-
+// src/components/Navbar.jsx
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -10,7 +10,7 @@ const Navbar = () => {
       <div className="container-fluid">
         <Link className="navbar-brand d-flex align-items-center" to="/">
           <i className="fas fa-rocket me-2"></i>
-          <span>Mi App</span>
+          <span>RollingMusic</span>
         </Link>
         
         <button 

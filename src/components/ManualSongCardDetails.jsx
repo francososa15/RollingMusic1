@@ -33,13 +33,8 @@ const ManualSongCardDetails = ({ song, onClose }) => {
                 <img
                   src={song.artworkUrl || 'https://via.placeholder.com/300x300?text=No+Image'}
                   alt={song.trackName}
-                  className="img-fluid rounded shadow"
-                  style={{ 
-                    width: "100%", 
-                    maxWidth: "250px", 
-                    height: "250px", 
-                    objectFit: "cover" 
-                  }}
+                  className="img-fluid rounded shadow w-100"
+                  style={{ maxWidth: "250px", aspectRatio: "1/1", objectFit: "cover", height: "auto" }}
                 />
               </div>
 
