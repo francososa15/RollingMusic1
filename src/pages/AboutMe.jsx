@@ -59,6 +59,27 @@ const AboutMe = () => {
                       Siempre buscando superar expectativas y crear soluciones innovadoras.
                     </p>
                   </div>
+                  <hr className="my-4" />
+                  <div className="d-flex gap-3 align-items-center mt-3">
+                    <a
+                      href="https://github.com/francososa15"
+                      className="btn btn-outline-dark"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fab fa-github me-2"></i>
+                      GitHub
+                    </a>
+                    <a
+                      href="https://www.linkedin.com"
+                      className="btn btn-outline-primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fab fa-linkedin me-2"></i>
+                      LinkedIn
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
