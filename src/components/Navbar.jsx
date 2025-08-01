@@ -1,9 +1,16 @@
 // src/components/Navbar.jsx
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
@@ -28,16 +35,16 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center" to="/about">
+              <Link className={`nav-link d-flex align-items-center${location.pathname === "/about" ? " active" : ""}`} to="/about">
                 <i className="fas fa-user me-2"></i>
-                <span>About Me</span>
+                <span>Sobre mí</span>
               </Link>
             </li>
             
             {currentUser ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link d-flex align-items-center" to="/favoritos">
+                  <Link className={`nav-link d-flex align-items-center${location.pathname === "/favoritos" ? " active" : ""}`} to="/favoritos">
                     <i className="fas fa-heart me-2"></i>
                     <span>Favoritos</span>
                   </Link>
@@ -46,15 +53,15 @@ const Navbar = () => {
                 {currentUser.role === "admin" && (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link d-flex align-items-center" to="/admin">
+                      <Link className={`nav-link d-flex align-items-center${location.pathname === "/admin" ? " active" : ""}`} to="/admin">
                         <i className="fas fa-lock me-2"></i>
-                        <span>Admin</span>
+                        <span>Administrador</span>
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link d-flex align-items-center" to="/likes">
+                      <Link className={`nav-link d-flex align-items-center${location.pathname === "/likes" ? " active" : ""}`} to="/likes">
                         <i className="fas fa-thumbs-up me-2"></i>
-                        <span>Likes de Usuarios</span>
+                        <span>Likes de usuarios</span>
                       </Link>
                     </li>
                   </>
@@ -67,7 +74,7 @@ const Navbar = () => {
                   </a>
                   <ul className="dropdown-menu" aria-labelledby="userDropdown">
                     <li>
-                      <button className="dropdown-item" onClick={logout}>
+                      <button className="dropdown-item" onClick={handleLogout}>
                         <i className="fas fa-sign-out-alt me-2"></i>
                         Cerrar sesión
                       </button>
@@ -83,7 +90,7 @@ const Navbar = () => {
                     </span>
                     <button 
                       className="btn btn-outline-light" 
-                      onClick={logout}
+                      onClick={handleLogout}
                       title="Cerrar sesión"
                     >
                       <i className="fas fa-sign-out-alt"></i>
@@ -94,7 +101,7 @@ const Navbar = () => {
               </>
             ) : (
               <li className="nav-item">
-                <Link className="nav-link d-flex align-items-center" to="/login">
+                <Link className={`nav-link d-flex align-items-center${location.pathname === "/login" ? " active" : ""}`} to="/login">
                   <i className="fas fa-sign-in-alt me-2"></i>
                   <span>Iniciar sesión</span>
                 </Link>
